@@ -1,6 +1,6 @@
 const DEFAULT_ATTRS = {
-  ['slide-anim']: 'fadeleft',
-  ['slide-delay']: 0,
+  'slide-anim': 'fadeleft',
+  'slide-delay': 0,
 }
 
 const isVisible = (el) => {
@@ -27,11 +27,12 @@ const getSlideAttributes = (attr) => ({
   ...objFilter(attr, (key, val) => key.startsWith('slide'))
 })
 
-const revealElements = (slideInElements) => {
-  for (let i = 0; i < slideInElements.length; i++) {
-    const e = slideInElements[i]
+// const getSlideAttributes = attr => DEFAULT_ATTRS.map()
 
-    if (isVisible(e) && !e.attributes['_slide-anim-triggered']) {
+
+const revealElements = (slideInElements) => {
+  for (let e of slideInElements) {
+    if (!e.attributes['_slide-anim-triggered'] && isVisible(e)) {
       const attrs = getSlideAttributes(e.attributes)
 
       e.style.visibility             = 'visible'
@@ -46,7 +47,9 @@ const revealElements = (slideInElements) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const slideInElements = Array.from(document.getElementsByClassName('slide'))
+  const slideInElements = document.querySelectorAll('[slide]')
+  slideInElements.forEach(e => e.classList.add('_slide'))
+
   const onScroll = () => revealElements(slideInElements) 
   window.addEventListener('scroll', onScroll)
   onScroll()

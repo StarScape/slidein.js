@@ -1,5 +1,5 @@
 {
-  "name": "slidein.js",
+  "name": "slidein",
   "version": "1.0.0",
   "description": "Dead simple, declarative reveal-on-scroll animations. No JS required.",
   "main": "index.js",

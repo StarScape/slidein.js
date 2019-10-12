@@ -4,9 +4,33 @@
 
   <meta charset="UTF-8">
   <title>Test Page</title>
+  <link rel="stylesheet" type="text/css" href="slidein.css">
+
+  <style type="text/css">
+    body {
+      height: 500vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .slidein {
+      width: 200px;
+      height: 200px;
+      background-color: #222222;
+      margin-bottom: calc(100vh - 200px);
+    }
+  </style>
 
 </head>
 <body>
+
+  <slide-settings default-anim='bar' />
+
+  <div class='slidein' slide></div>
+  <div class='slidein' slide></div>
 
   <script type='module' src='index.js'></script>
 
