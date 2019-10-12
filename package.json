@@ -1,0 +1,26 @@
+{
+  "name": "slidein.js",
+  "version": "1.0.0",
+  "description": "Dead simple, declarative reveal-on-scroll animations. No JS required.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StarScape/slidein.js.git"
+  },
+  "keywords": [
+    "slide",
+    "slidein",
+    "reveal",
+    "scroll",
+    "animation"
+  ],
+  "author": "Jack A. Arrington",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StarScape/slidein.js/issues"
+  },
+  "homepage": "https://github.com/StarScape/slidein.js#readme"
+}
