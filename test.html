@@ -8,19 +8,24 @@
 
   <style type="text/css">
     body {
-      height: 500vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       margin: 0;
       padding: 0;
+      font-family: Arial;
     }
 
     .slidein {
-      width: 200px;
-      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 500px;
+      height: 500px;
+      color: white;
       background-color: #222222;
-      margin-bottom: calc(100vh - 200px);
+      margin-bottom: calc(100vh - 500px);
+      font-size: 40px;
     }
   </style>
 
@@ -29,8 +34,12 @@
 
   <slide-settings default-anim='bar' />
 
-  <div class='slidein' slide></div>
-  <div class='slidein' slide></div>
+  <div class='slidein' slide-duration='0.25s' slide>1</div>
+  <div class='slidein' slide-anim='growleft' slide>2</div>
+  <div class='slidein' slide-anim='growright' slide>3</div>
+  <div class='slidein' slide-anim='fadetop' slide>4</div>
+  <div class='slidein' slide-anim='fadebottom' slide>5</div>
+  <div class='slidein' slide-anim='faderight' slide>6</div>
 
   <script type='module' src='index.js'></script>
 

@@ -1,5 +1,7 @@
 const DEFAULT_ATTRS = {
   'slide-anim': 'fadeleft',
+  'slide-duration': '0.5s',
+  'slide-anim-function': 'ease-in-out',
   'slide-delay': 0,
 }
 
@@ -22,35 +24,47 @@ const objFilter = (obj, predicate) =>
          .filter(([key, val]) => predicate(key, val))
          .reduce((newObj, [key, val]) => (newObj[key] = key, newObj), {})
 
-const getSlideAttributes = (attr) => ({
-  ...DEFAULT_ATTRS,
-  ...objFilter(attr, (key, val) => key.startsWith('slide'))
-})
+const getSlideAttributes = (attr) => {
+  const slideAttributes = { ...DEFAULT_ATTRS }
 
-// const getSlideAttributes = attr => DEFAULT_ATTRS.map()
+  Object.keys(DEFAULT_ATTRS).forEach(k => {
+    if (attr[k]) {
+      slideAttributes[k] = attr[k].nodeValue
+    }
+  })
 
+  return slideAttributes
+}
 
-const revealElements = (slideInElements) => {
-  for (let e of slideInElements) {
-    if (!e.attributes['_slide-anim-triggered'] && isVisible(e)) {
+const setAttributes = (e, attrs) => {
+  e.style['visibility']          = 'visible'
+  e.style['animation-name']      = attrs['slide-anim']
+  e.style['animation-duration']  = attrs['slide-duration']
+  e.style['animation-delay']     = attrs['slide-delay']
+  e.style['animation-fill-mode'] = 'forwards'
+
+  // Mark as animated
+  e.setAttribute('_slide-anim-triggered', 'true')
+}
+
+const revealElements = (elements) => {
+  for (let e of elements) {
+    if (isVisible(e) && !e.attributes['_slide-anim-triggered'] ) {
       const attrs = getSlideAttributes(e.attributes)
+      setAttributes(e, attrs)
 
-      e.style.visibility             = 'visible'
-      e.style.animation              = `${attrs['slide-anim']} 0.5s ease-in-out`
-      e.style['animation-delay']     = `${attrs['slide-delay']}s`
-      e.style['animation-fill-mode'] = 'forwards'
-
-      // Mark as animated
-      e.setAttribute('_slide-anim-triggered', 'true')
+      if (attrs['slide-cascade']) {
+        // Todo
+      }
     }
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const slideInElements = document.querySelectorAll('[slide]')
-  slideInElements.forEach(e => e.classList.add('_slide'))
+  const elements = Array.from(document.querySelectorAll('[slide]'))
+  elements.forEach(e => e.classList.add('slidein'))
 
-  const onScroll = () => revealElements(slideInElements) 
+  const onScroll = () => revealElements(elements)
   window.addEventListener('scroll', onScroll)
   onScroll()
 })
