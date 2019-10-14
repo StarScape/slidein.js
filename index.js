@@ -17,13 +17,6 @@ const isVisible = (el) => {
   return isVisible;
 }
 
-// Returns an object composed of the properties of `obj` that match the predicate
-// Predicate is passed both and key and value for each property
-const objFilter = (obj, predicate) =>
-   Object.entries(obj)
-         .filter(([key, val]) => predicate(key, val))
-         .reduce((newObj, [key, val]) => (newObj[key] = key, newObj), {})
-
 const getSlideAttributes = (attr) => {
   const slideAttributes = { ...DEFAULT_ATTRS }
 
@@ -37,34 +30,58 @@ const getSlideAttributes = (attr) => {
 }
 
 const setAttributes = (e, attrs) => {
-  e.style['visibility']          = 'visible'
-  e.style['animation-name']      = attrs['slide-anim']
-  e.style['animation-duration']  = attrs['slide-duration']
-  e.style['animation-delay']     = attrs['slide-delay']
-  e.style['animation-fill-mode'] = 'forwards'
+  e.classList.add('slidein')
 
-  // Mark as animated
-  e.setAttribute('_slide-anim-triggered', 'true')
+  e.style['animation-play-state'] = 'paused'
+  e.style['animation-fill-mode']  = 'forwards'
+  e.style['animation-name']       = attrs['slide-anim']
+  e.style['animation-duration']   = attrs['slide-duration']
+  e.style['animation-delay']      = attrs['slide-delay']
 }
 
 const revealElements = (elements) => {
   for (let e of elements) {
     if (isVisible(e) && !e.attributes['_slide-anim-triggered'] ) {
-      const attrs = getSlideAttributes(e.attributes)
-      setAttributes(e, attrs)
-
-      if (attrs['slide-cascade']) {
-        // Todo
-      }
+      e.style['animation-play-state'] = 'running'
+      e.setAttribute('_slide-anim-triggered', 'true')
     }
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const elements = Array.from(document.querySelectorAll('[slide]'))
-  elements.forEach(e => e.classList.add('slidein'))
+const initCascadeElems = () => {
+  const cascadeElems = Array.from(document.querySelectorAll('[slide-cascade]'))
+  const cascadeChildren = []
 
-  const onScroll = () => revealElements(elements)
+  for (let e of cascadeElems) {
+    const attributes = getSlideAttributes(e.attributes)
+    const delayIncrement = e.getAttribute('slide-cascade-increment') || '0.25s'
+    const initialDelay = '0s'
+    let delays = 0
+
+    for (let child of e.children) {
+      setAttributes(child, {
+        ...attributes,
+        'slide-delay': `calc(${initialDelay} + ${delays++} * ${delayIncrement})`
+      })
+      cascadeChildren.push(child)
+    }
+  }
+
+  return cascadeChildren
+}
+
+const initSlideElems = () => {
+  const slideInElems = Array.from(document.querySelectorAll('[slide]'))
+  for (let e of slideInElems) {
+    setAttributes(e, getSlideAttributes(e.attributes))
+  }
+  return slideInElems
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const elems = [...initCascadeElems(), ...initSlideElems()]
+
+  const onScroll = () => revealElements(elems)
   window.addEventListener('scroll', onScroll)
   onScroll()
 })

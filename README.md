@@ -6,3 +6,4 @@ TODO:
   * noslide
   * Slide-settings
   * CSS custom properties
+  * Optimize
