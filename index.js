@@ -22,12 +22,14 @@ const isVisible = (el) => {
   return isVisible;
 }
 
-const getSlideAttributes = (defaults, attr) => {
+// Takes a set of defaults (plain object) and a NamedNodeMap of HTML element attributes.
+// Returns an object of all the 'slide-' attributes found in attrs, or their defaults.
+const getSlideAttrs = (defaults, attrs) => {
   const slideAttributes = { ...defaults }
 
   Object.keys(slideAttributes).forEach(k => {
-    if (attr[k]) {
-      slideAttributes[k] = attr[k].nodeValue
+    if (attrs[k]) {
+      slideAttributes[k] = attrs[k].nodeValue
     }
   })
 
@@ -45,7 +47,7 @@ const setAttributes = (e, attrs) => {
 }
 
 const revealElements = (elements) => {
-  for (let e of elements) {
+  for (const e of elements) {
     if (e.style['animation-play-state'] !== 'running' && isVisible(e)) {
       e.style['animation-play-state'] = 'running'
     }
@@ -56,17 +58,16 @@ const initCascadeElems = () => {
   const cascadeElems = Array.from(document.querySelectorAll('[slide-cascade]'))
   const cascadeChildren = []
 
-  for (let e of cascadeElems) {
-    const attributes = getSlideAttributes(DEFAULT_CASCADE_ATTRS, e.attributes)
+  for (const parent of cascadeElems) {
+    const parentAttrs = getSlideAttrs(DEFAULT_CASCADE_ATTRS, parent.attributes)
     const initialDelay = '0s'
-    let delays = e.attributes['slide'] ? 1 : 0
+    let delays = parent.attributes['slide'] ? 1 : 0
 
-    for (let child of e.children) {
-      const childAttrs = getSlideAttributes(attributes, child.attributes)
-
+    for (const child of parent.children) {
+      const childAttrs = getSlideAttrs(parentAttrs, child.attributes)
       setAttributes(child, {
         ...childAttrs,
-        'slide-delay': `calc(${initialDelay} + ${delays++} * ${attributes['slide-cascade-increment']})`
+        'slide-delay': `calc(${initialDelay} + ${delays++} * ${parentAttrs['slide-cascade-increment']})`
       })
       cascadeChildren.push(child)
     }
@@ -75,18 +76,43 @@ const initCascadeElems = () => {
   return cascadeChildren
 }
 
+const initSlideChildrenElems = () => {
+  const slideChildrenElems = Array.from(document.querySelectorAll('[slide-children]'))
+  const slideChildren = []
+
+  for (const parent of slideChildrenElems) {
+    const parentAttrs = getSlideAttrs(DEFAULT_ATTRS, parent.attributes)
+
+    for (const child of parent.children) {
+      const childAttrs = getSlideAttrs(parentAttrs, child.attributes)
+      setAttributes(child, childAttrs)
+      slideChildren.push(child)
+    }
+  }
+
+  return slideChildren
+}
+
 const initSlideElems = () => {
   const slideInElems = Array.from(document.querySelectorAll('[slide]'))
-  for (let e of slideInElems) {
-    setAttributes(e, getSlideAttributes(DEFAULT_ATTRS, e.attributes))
+  for (const e of slideInElems) {
+    setAttributes(e, getSlideAttrs(DEFAULT_ATTRS, e.attributes))
   }
   return slideInElems
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const elems = [...initCascadeElems(), ...initSlideElems()]
+  const cascadedElems = initCascadeElems()
+  const slideChildrenElems = initSlideChildrenElems()
+  const slideElems = initSlideElems()
 
-  const onScroll = () => revealElements(elems)
+  const allElems = [
+    ...cascadedElems,
+    ...slideChildrenElems,
+    ...slideElems
+  ]
+
+  const onScroll = () => revealElements(allElems)
   window.addEventListener('scroll', onScroll)
   onScroll()
 })
