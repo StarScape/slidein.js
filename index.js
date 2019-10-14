@@ -37,18 +37,23 @@ const getSlideAttrs = (defaults, attrs) => {
 }
 
 const setAttributes = (e, attrs) => {
-  e.classList.add('slidein')
+  if (!e.attributes['noslide']) {
+    e.classList.add('slidein')
 
-  e.style['animation-play-state'] = 'paused'
-  e.style['animation-fill-mode']  = 'forwards'
-  e.style['animation-name']       = attrs['slide-anim']
-  e.style['animation-duration']   = attrs['slide-duration']
-  e.style['animation-delay']      = attrs['slide-delay']
+    e.style['animation-play-state'] = 'paused'
+    e.style['animation-fill-mode']  = 'forwards'
+    e.style['animation-name']       = attrs['slide-anim']
+    e.style['animation-duration']   = attrs['slide-duration']
+    e.style['animation-delay']      = attrs['slide-delay']
+  }
 }
+
+const shouldReveal = e =>
+  e.style['animation-play-state'] !== 'running' && !e.attributes['noslide'] && isVisible(e)
 
 const revealElements = (elements) => {
   for (const e of elements) {
-    if (e.style['animation-play-state'] !== 'running' && isVisible(e)) {
+    if (shouldReveal(e)) {
       e.style['animation-play-state'] = 'running'
     }
   }
