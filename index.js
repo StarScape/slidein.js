@@ -41,9 +41,8 @@ const setAttributes = (e, attrs) => {
 
 const revealElements = (elements) => {
   for (let e of elements) {
-    if (isVisible(e) && !e.attributes['_slide-anim-triggered'] ) {
+    if (e.style['animation-play-state'] !== 'running' && isVisible(e)) {
       e.style['animation-play-state'] = 'running'
-      e.setAttribute('_slide-anim-triggered', 'true')
     }
   }
 }
