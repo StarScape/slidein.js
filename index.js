@@ -5,6 +5,11 @@ const DEFAULT_ATTRS = {
   'slide-delay': 0,
 }
 
+const DEFAULT_CASCADE_ATTRS = {
+  ...DEFAULT_ATTRS,
+  'slide-cascade-increment': '0.25s',
+}
+
 const isVisible = (el) => {
   const rect = el.getBoundingClientRect()
   const elemTop = rect.top
@@ -17,10 +22,10 @@ const isVisible = (el) => {
   return isVisible;
 }
 
-const getSlideAttributes = (attr) => {
-  const slideAttributes = { ...DEFAULT_ATTRS }
+const getSlideAttributes = (defaults, attr) => {
+  const slideAttributes = { ...defaults }
 
-  Object.keys(DEFAULT_ATTRS).forEach(k => {
+  Object.keys(slideAttributes).forEach(k => {
     if (attr[k]) {
       slideAttributes[k] = attr[k].nodeValue
     }
@@ -52,15 +57,16 @@ const initCascadeElems = () => {
   const cascadeChildren = []
 
   for (let e of cascadeElems) {
-    const attributes = getSlideAttributes(e.attributes)
-    const delayIncrement = e.getAttribute('slide-cascade-increment') || '0.25s'
+    const attributes = getSlideAttributes(DEFAULT_CASCADE_ATTRS, e.attributes)
     const initialDelay = '0s'
-    let delays = 0
+    let delays = e.attributes['slide'] ? 1 : 0
 
     for (let child of e.children) {
+      const childAttrs = getSlideAttributes(attributes, child.attributes)
+
       setAttributes(child, {
-        ...attributes,
-        'slide-delay': `calc(${initialDelay} + ${delays++} * ${delayIncrement})`
+        ...childAttrs,
+        'slide-delay': `calc(${initialDelay} + ${delays++} * ${attributes['slide-cascade-increment']})`
       })
       cascadeChildren.push(child)
     }
@@ -72,7 +78,7 @@ const initCascadeElems = () => {
 const initSlideElems = () => {
   const slideInElems = Array.from(document.querySelectorAll('[slide]'))
   for (let e of slideInElems) {
-    setAttributes(e, getSlideAttributes(e.attributes))
+    setAttributes(e, getSlideAttributes(DEFAULT_ATTRS, e.attributes))
   }
   return slideInElems
 }
