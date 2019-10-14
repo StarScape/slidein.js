@@ -3,5 +3,6 @@ Painless, declarative slide-in-on-scroll animations without writing a single lin
 TODO: 
   * Slide-settings
   * CSS custom properties
-  * Optimize
+  * Optimize?
+  * Tests
   * Documentation

@@ -59,6 +59,23 @@ const revealElements = (elements) => {
   }
 }
 
+// If there is a <slide-settings> elem, use it to set default values
+const setDefaultAttrs = () => {
+  const slideSettings = document.querySelector('slide-settings')
+  if (slideSettings) {
+    // Use DEFAULT_CASCADE_ATTRS since it is a superset of DEFAULT_ATTRS
+    Object.entries(DEFAULT_CASCADE_ATTRS).forEach(([attrName, value]) => {
+      // For every slide- attribute, look for a corresponding
+      // attribute in slide-settings, replacing 'slide-' with 'default-'
+      const defaultAttr = slideSettings.attributes[attrName.replace('slide-', 'default-')]
+      if (defaultAttr) {
+        DEFAULT_ATTRS[attrName] = defaultAttr.nodeValue
+        DEFAULT_CASCADE_ATTRS[attrName] = defaultAttr.nodeValue
+      }
+    })
+  }
+}
+
 const initCascadeElems = () => {
   const cascadeElems = Array.from(document.querySelectorAll('[slide-cascade]'))
   const cascadeChildren = []
@@ -107,6 +124,7 @@ const initSlideElems = () => {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  setDefaultAttrs()
   const cascadedElems = initCascadeElems()
   const slideChildrenElems = initSlideChildrenElems()
   const slideElems = initSlideElems()
