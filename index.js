@@ -45,7 +45,7 @@ const getSlideAttrs = (defaults, elem) => {
 
 const setAttributes = (e, attrs) => {
   if (!e.attributes['noslide']) {
-    e.classList.add('slidein')
+    e.classList.add('_slidein')
 
     e.style['animation-play-state'] = 'paused'
     e.style['animation-fill-mode']  = 'forwards'
