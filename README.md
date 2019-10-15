@@ -2,6 +2,7 @@ Painless, declarative slide-in-on-scroll animations without writing a single lin
 
 TODO: 
   * Settings for partial visibility reveal
+  * change to getAttribute()
   * Optimize?
   * Tests
   * Documentation

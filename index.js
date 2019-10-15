@@ -3,6 +3,7 @@ const DEFAULT_ATTRS = {
   'slide-duration': '0.5s',
   'slide-anim-function': 'ease-in-out',
   'slide-delay': 0,
+  'slide-visibility': 'full',
 }
 
 const DEFAULT_CASCADE_ATTRS = {
@@ -44,11 +45,12 @@ const getSlideAttrs = (defaults, elem) => {
     const htmlAttr = elem.attributes[k]
     const cssAttr = style.getPropertyValue(`--${k}`)
 
-    if (htmlAttr) {
-      slideAttributes[k] = htmlAttr.nodeValue
-    }
+    // Here as well, CSS styles take precedence
     if (cssAttr) {
       slideAttributes[k] = cssAttr
+    }
+    else if (htmlAttr) {
+      slideAttributes[k] = htmlAttr.nodeValue
     }
   })
 
@@ -59,6 +61,7 @@ const getSlideAttrs = (defaults, elem) => {
 const setAttributes = (e, attrs) => {
   if (!e.attributes['noslide']) {
     e.classList.add('_slidein')
+    e.setAttribute('slide-visibility', attrs['slide-visibility'])
 
     e.style['animation-play-state'] = 'paused'
     e.style['animation-fill-mode']  = 'forwards'
@@ -73,12 +76,19 @@ const isVisible = (el) => {
   const rect = el.getBoundingClientRect()
   const elemTop = rect.top
   const elemBottom = rect.bottom
+  const slideVisibility = el.getAttribute('slide-visibility').trim()
 
   // Only completely visible elements return true:
-  const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight)
+  if (slideVisibility === 'full') {
+    return (elemTop >= 0) && (elemBottom <= window.innerHeight)
+  }
   // Partially visible elements return true:
-  // const isVisible = elemTop < window.innerHeight && elemBottom >= 0
-  return isVisible;
+  else if (slideVisibility === 'partial') {
+    return elemTop < window.innerHeight && elemBottom >= 0
+  }
+  else {
+    throw new Error(`Unrecognized property for slide-visibility: ${slideVisibility}`)
+  }
 }
 
 const shouldReveal = e =>
