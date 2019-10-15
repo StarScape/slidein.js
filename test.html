@@ -14,6 +14,7 @@
       margin: 0;
       padding: 0;
       font-family: Arial;
+      background-color: #f0f0f0;
     }
 
     .slidein-elem {
@@ -37,6 +38,11 @@
       flex: 1;
       width: 100%;
     }
+
+    .slide-css {
+      --slide-anim: growright;
+      --slide-duration: 2s;
+    }
   </style>
 
 </head>
@@ -50,12 +56,14 @@
     <div slide-anim='faderight' style='background-color: rgb(100, 100, 255);'>...should...</div>
     <div style='background-color: rgb(150, 150, 255);'>...cascade!</div>
   </div>
-  <div class='slidein-elem with-content' slide-duration='0.75s' slide-children>
+  <div class='slidein-elem with-content' slide-duration='1.5s' slide-children>
     <div style='background-color: rgb(0, 0, 255);'>These should...</div>
     <div slide-anim='faderight' style='background-color: rgb(100, 100, 255);'>...all slide in...</div>
     <div style='background-color: rgb(150, 150, 255);'>...as soon as you see them.</div>
     <div style='background-color: rgb(150, 150, 255);' noslide>And this should be fixed.</div>
   </div>
+
+  <div class='slidein-elem slide-css' slide>CSS</div>
   <div class='slidein-elem' slide-duration='0.25s' slide>1</div>
   <div class='slidein-elem' slide-anim='growleft' slide>2</div>
   <div class='slidein-elem' slide-anim='growright' slide>3</div>

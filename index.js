@@ -22,14 +22,21 @@ const isVisible = (el) => {
   return isVisible;
 }
 
-// Takes a set of defaults (plain object) and a NamedNodeMap of HTML element attributes.
-// Returns an object of all the 'slide-' attributes found in attrs, or their defaults.
-const getSlideAttrs = (defaults, attrs) => {
+// Gets the slide attributes for an element, defaulting to
+// those in `defaults` for whichever ones aren't present
+const getSlideAttrs = (defaults, elem) => {
   const slideAttributes = { ...defaults }
+  const style = window.getComputedStyle(elem)
 
   Object.keys(slideAttributes).forEach(k => {
-    if (attrs[k]) {
-      slideAttributes[k] = attrs[k].nodeValue
+    const htmlAttr = elem.attributes[k]
+    const cssAttr = style.getPropertyValue(`--${k}`)
+
+    if (htmlAttr) {
+      slideAttributes[k] = htmlAttr.nodeValue
+    }
+    if (cssAttr) {
+      slideAttributes[k] = cssAttr
     }
   })
 
@@ -81,12 +88,12 @@ const initCascadeElems = () => {
   const cascadeChildren = []
 
   for (const parent of cascadeElems) {
-    const parentAttrs = getSlideAttrs(DEFAULT_CASCADE_ATTRS, parent.attributes)
+    const parentAttrs = getSlideAttrs(DEFAULT_CASCADE_ATTRS, parent)
     const initialDelay = '0s'
     let delays = parent.attributes['slide'] ? 1 : 0
 
     for (const child of parent.children) {
-      const childAttrs = getSlideAttrs(parentAttrs, child.attributes)
+      const childAttrs = getSlideAttrs(parentAttrs, child)
       setAttributes(child, {
         ...childAttrs,
         'slide-delay': `calc(${initialDelay} + ${delays++} * ${parentAttrs['slide-cascade-increment']})`
@@ -103,10 +110,10 @@ const initSlideChildrenElems = () => {
   const slideChildren = []
 
   for (const parent of slideChildrenElems) {
-    const parentAttrs = getSlideAttrs(DEFAULT_ATTRS, parent.attributes)
+    const parentAttrs = getSlideAttrs(DEFAULT_ATTRS, parent)
 
     for (const child of parent.children) {
-      const childAttrs = getSlideAttrs(parentAttrs, child.attributes)
+      const childAttrs = getSlideAttrs(parentAttrs, child)
       setAttributes(child, childAttrs)
       slideChildren.push(child)
     }
@@ -118,7 +125,7 @@ const initSlideChildrenElems = () => {
 const initSlideElems = () => {
   const slideInElems = Array.from(document.querySelectorAll('[slide]'))
   for (const e of slideInElems) {
-    setAttributes(e, getSlideAttrs(DEFAULT_ATTRS, e.attributes))
+    setAttributes(e, getSlideAttrs(DEFAULT_ATTRS, e))
   }
   return slideInElems
 }
