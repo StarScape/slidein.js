@@ -10,20 +10,32 @@ const DEFAULT_CASCADE_ATTRS = {
   'slide-cascade-increment': '0.25s',
 }
 
-const isVisible = (el) => {
-  const rect = el.getBoundingClientRect()
-  const elemTop = rect.top
-  const elemBottom = rect.bottom
-
-  // Only completely visible elements return true:
-  const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight)
-  // Partially visible elements return true:
-  // const isVisible = elemTop < window.innerHeight && elemBottom >= 0
-  return isVisible;
+// If there is a <slide-settings> or --slide-default CSS
+// properties on the body, use them to set default values.
+const setDefaultAttrs = () => {
+  const slideSettings = document.querySelector('slide-settings')
+  const bodyStyle = window.getComputedStyle(document.body)
+  // Use DEFAULT_CASCADE_ATTRS since it is a superset of DEFAULT_ATTRS
+  Object.entries(DEFAULT_CASCADE_ATTRS).forEach(([attrName, value]) => {
+    // For every slide- attribute, look for a corresponding
+    // attribute in slide-settings, replacing 'slide-' with 'default-',
+    // or in the style of the body, replacing 'slide-' with '--slide-default-'.
+    // CSS styles take a higher precendence than HTML attributes.
+    const defaultAttrCSS = bodyStyle.getPropertyValue(attrName.replace('slide-', '--slide-default-'))
+    if (defaultAttrCSS) {
+      DEFAULT_ATTRS[attrName] = defaultAttrCSS
+      DEFAULT_CASCADE_ATTRS[attrName] = defaultAttrCSS
+    }
+    else if (slideSettings) {
+      const defaultAttrHTML = slideSettings.attributes[attrName.replace('slide-', 'default-')]
+      DEFAULT_ATTRS[attrName] = defaultAttrHTML.nodeValue
+      DEFAULT_CASCADE_ATTRS[attrName] = defaultAttrHTML.nodeValue
+    }
+  })
 }
 
 // Gets the slide attributes for an element, defaulting to
-// those in `defaults` for whichever ones aren't present
+// those in `defaults` for whichever ones aren't present.
 const getSlideAttrs = (defaults, elem) => {
   const slideAttributes = { ...defaults }
   const style = window.getComputedStyle(elem)
@@ -43,6 +55,7 @@ const getSlideAttrs = (defaults, elem) => {
   return slideAttributes
 }
 
+// Helper method to set animation properties on element e.
 const setAttributes = (e, attrs) => {
   if (!e.attributes['noslide']) {
     e.classList.add('_slidein')
@@ -55,9 +68,23 @@ const setAttributes = (e, attrs) => {
   }
 }
 
+// Is the element visible in the viewport?
+const isVisible = (el) => {
+  const rect = el.getBoundingClientRect()
+  const elemTop = rect.top
+  const elemBottom = rect.bottom
+
+  // Only completely visible elements return true:
+  const isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight)
+  // Partially visible elements return true:
+  // const isVisible = elemTop < window.innerHeight && elemBottom >= 0
+  return isVisible;
+}
+
 const shouldReveal = e =>
   e.style['animation-play-state'] !== 'running' && !e.attributes['noslide'] && isVisible(e)
 
+// Reveal any elements that are in view.
 const revealElements = (elements) => {
   for (const e of elements) {
     if (shouldReveal(e)) {
@@ -66,23 +93,7 @@ const revealElements = (elements) => {
   }
 }
 
-// If there is a <slide-settings> elem, use it to set default values
-const setDefaultAttrs = () => {
-  const slideSettings = document.querySelector('slide-settings')
-  if (slideSettings) {
-    // Use DEFAULT_CASCADE_ATTRS since it is a superset of DEFAULT_ATTRS
-    Object.entries(DEFAULT_CASCADE_ATTRS).forEach(([attrName, value]) => {
-      // For every slide- attribute, look for a corresponding
-      // attribute in slide-settings, replacing 'slide-' with 'default-'
-      const defaultAttr = slideSettings.attributes[attrName.replace('slide-', 'default-')]
-      if (defaultAttr) {
-        DEFAULT_ATTRS[attrName] = defaultAttr.nodeValue
-        DEFAULT_CASCADE_ATTRS[attrName] = defaultAttr.nodeValue
-      }
-    })
-  }
-}
-
+// Set animation properties on children of elements who have a 'slide-cascade' property
 const initCascadeElems = () => {
   const cascadeElems = Array.from(document.querySelectorAll('[slide-cascade]'))
   const cascadeChildren = []
@@ -105,6 +116,7 @@ const initCascadeElems = () => {
   return cascadeChildren
 }
 
+// Set animation properties on children of elements who have a 'slide-children' property
 const initSlideChildrenElems = () => {
   const slideChildrenElems = Array.from(document.querySelectorAll('[slide-children]'))
   const slideChildren = []
@@ -122,6 +134,7 @@ const initSlideChildrenElems = () => {
   return slideChildren
 }
 
+// Set animation properties on elements who have a 'slide' property
 const initSlideElems = () => {
   const slideInElems = Array.from(document.querySelectorAll('[slide]'))
   for (const e of slideInElems) {
