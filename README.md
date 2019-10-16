@@ -5,4 +5,6 @@ TODO:
   * change to getAttribute()
   * Optimize?
   * Tests
+  * CSS imported automatically
+  * Compilation
   * Documentation
