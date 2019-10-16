@@ -1,7 +1,7 @@
 {
   "name": "slidein",
   "version": "1.0.0",
-  "description": "Dead simple, declarative reveal-on-scroll animations. No JS required.",
+  "description": "Dead simple, declarative reveal-on-scroll animations.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

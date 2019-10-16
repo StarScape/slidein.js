@@ -153,7 +153,10 @@ const initSlideElems = () => {
   return slideInElems
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Init all necessary animation properties for slide elements
+// and change listener to check for visible elements to slide in.
+// Can be called externally, if the user adds slide elements to the DOM post-load
+export const update = () => {
   setDefaultAttrs()
   const cascadedElems = initCascadeElems()
   const slideChildrenElems = initSlideChildrenElems()
@@ -166,6 +169,10 @@ document.addEventListener('DOMContentLoaded', () => {
   ]
 
   const onScroll = () => revealElements(allElems)
-  window.addEventListener('scroll', onScroll)
   onScroll()
-})
+
+  window.removeEventListener('scroll', onScroll)
+  window.addEventListener('scroll', onScroll)
+}
+
+document.addEventListener('DOMContentLoaded', update)

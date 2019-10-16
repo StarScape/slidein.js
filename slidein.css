@@ -1,3 +1,10 @@
+/* Built-in animations
+ * Slidein is not limited to these (you are free to
+ * set slide-anim to use any animation defined in CSS),
+ * but these cover pretty much everything you'd want.
+ */
+
+/* Fade in from left */
 @keyframes fadeleft {
   from {
     opacity: 0;
@@ -9,6 +16,7 @@
   }
 }
 
+/* Fade in from right */
 @keyframes faderight {
   from {
     opacity: 0;
@@ -20,6 +28,7 @@
   }
 }
 
+/* Fade in from top */
 @keyframes fadetop {
   from {
     opacity: 0;
@@ -31,6 +40,7 @@
   }
 }
 
+/* Fade in from bottom */
 @keyframes fadebottom {
   from {
     opacity: 0;
@@ -42,6 +52,7 @@
   }
 }
 
+/* Grow element from left */
 @keyframes growleft {
   from {
     opacity: 0;
@@ -56,6 +67,7 @@
 
 }
 
+/* Grow element from right */
 @keyframes growright {
   from {
     opacity: 0;
@@ -70,6 +82,15 @@
 
 }
 
-._slidein {
+[slide] {
+  opacity: 0;
+}
+
+/* Hide children of cascade and slide-children elements */
+[slide-cascade] > * {
+  opacity: 0;
+}
+
+[slide-children] > * {
   opacity: 0;
 }
