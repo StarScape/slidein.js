@@ -60,14 +60,17 @@ const getSlideAttrs = (defaults, elem) => {
 // Helper method to set animation properties on element e.
 const setAttributes = (e, attrs) => {
   if (!e.attributes['noslide']) {
-    e.classList.add('_slidein')
     e.setAttribute('slide-visibility', attrs['slide-visibility'])
+    e.classList.remove('noslide')
 
     e.style['animation-play-state'] = 'paused'
     e.style['animation-fill-mode']  = 'forwards'
     e.style['animation-name']       = attrs['slide-anim']
     e.style['animation-duration']   = attrs['slide-duration']
     e.style['animation-delay']      = attrs['slide-delay']
+  }
+  else {
+    e.classList.add('noslide')
   }
 }
 

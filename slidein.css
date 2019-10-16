@@ -82,6 +82,10 @@
 
 }
 
+.noslide {
+  opacity: inherit !important;
+}
+
 [slide] {
   opacity: 0;
 }

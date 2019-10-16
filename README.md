@@ -6,3 +6,4 @@ TODO:
   * Compilation
   * Documentation
   * Test with website
+  * Switch HTML attributes to override CSS
