@@ -1,6 +1,6 @@
 # Slidein.js [![npm](https://badge.fury.io/js/slidein.svg)](https://npmjs.com/package/slidein)
 
-Painless, declarative reveal-on-scroll animations without even writing a line Javascript.
+Painless, declarative reveal-on-scroll animations. Without even writing a line of Javascript.
 
 ## Features
 * Zero-dependency
