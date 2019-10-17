@@ -43,7 +43,6 @@ You can customize the animation, duration, and delay of the slide-in that happen
 ```html
 <div class='...' slide-duration='3s' slide-anim='fadetop' slide-delay='0.5s' slide>slidein.js</div>
 ```
-
 ![](./gifs/custom.gif)
 
 You can set a **cascade**, which causes an element's children to slide in one after another:
@@ -56,7 +55,7 @@ You can set a **cascade**, which causes an element's children to slide in one af
   <div class='...'>...cascade!</div>
 </div>
 ```
-[](./gifs/cascade.gif)
+![](./gifs/cascade.gif)
 
 Or simply set all an element's children to slidein, because DRY FTW:
 
@@ -69,7 +68,7 @@ Or simply set all an element's children to slidein, because DRY FTW:
   <div class='...'>...as soon as you see them.</div>
 </div>
 ```
-[](./gifs/children.gif)
+![](./gifs/children.gif)
 
 You can also exclude children by adding the `noslide` property (see API below).
 
