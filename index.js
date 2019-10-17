@@ -1,4 +1,4 @@
-import './slidein.css'
+// import './slidein.css'
 
 const DEFAULT_ATTRS = {
   'slide-anim': 'fadeleft',
@@ -161,7 +161,7 @@ const initSlideElems = () => {
 // Init all necessary animation properties for slide elements
 // and change listener to check for visible elements to slide in.
 // Can be called externally, if the user adds slide elements to the DOM post-load
-export const update = () => {
+const update = () => {
   setDefaultAttrs()
   const cascadedElems = initCascadeElems()
   const slideChildrenElems = initSlideChildrenElems()
@@ -181,3 +181,7 @@ export const update = () => {
 }
 
 document.addEventListener('DOMContentLoaded', update)
+
+export default {
+  update,
+}
