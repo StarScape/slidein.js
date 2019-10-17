@@ -1,3 +1,5 @@
+import './slidein.css'
+
 const DEFAULT_ATTRS = {
   'slide-anim': 'fadeleft',
   'slide-duration': '0.5s',
