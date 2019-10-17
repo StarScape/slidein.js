@@ -27,7 +27,7 @@ Painless, declarative reveal-on-scroll animations. Without even writing a line o
 
 Add these to your HTML:
 ```html
-<link rel="stylesheet" type="text/css" href="./node_modules/slidein/slidein.css">
+<link rel="stylesheet" type="text/css" href="./node_modules/dist/slidein.css">
 <script type="text/javascript" src='./node_modules/dist/slidein.js'></script>
 ```
 
@@ -185,13 +185,24 @@ The amount of time to wait **after** the element becomes visible before playing 
 ---
 
 `slide-visibility`:
-By default, slidein.js will reveal your element when it is **fully** in the user's viewport. However, by changing this setting to 'partial', it will reveal when only part of the element is visibile;
+By default, slidein.js will reveal your element when it is **fully** in the user's viewport. However, by changing this setting to 'partial', it will reveal when only part of the element is visibile.
 
 **HTML**: `<div slide-visibility='partial'></div>`
 
 **CSS**: `.my-elem { --slide-visibility: partial; }`
 
 **Default**: full
+
+---
+
+`slide-cascade-increment`:
+The interval between each of the children of a `slide-cascade`-marked element sliding in.
+
+**HTML**: `<div slide-cascade-increment='0.5s'></div>`
+
+**CSS**: `.my-elem { --slide-cascade-increment: 0.5s; }`
+
+**Default**: 0.25s
 
 ---
 
@@ -204,6 +215,14 @@ By default, slidein.js will reveal your element when it is **fully** in the user
 `fadetop`: fades the element in from the top
 
 `fadebottom`: fades the element in from the bottom
+
+`growleft`: makes an element grow in from the left
+
+`growright`: makes an element grow in from the right
+
+`growtop`: makes an element grow in from the top
+
+`growbottom`: makes an element grow in from the bottom
 
 ### Setting Defaults
 
@@ -256,6 +275,6 @@ class MyFancyComponent extends TheNextBigThingJS.Component {
 }
 ````
 
-#### Contributing
+### Contributing
 
 Contributions welcome. If you have a potential improvement in mind, open an issue to talk about it.
