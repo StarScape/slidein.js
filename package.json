@@ -1,6 +1,6 @@
 {
   "name": "slidein",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Dead simple, declarative reveal-on-scroll animations.",
   "module": "./index.js",
   "main": "dist/slidein.js",
