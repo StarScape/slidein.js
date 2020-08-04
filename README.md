@@ -33,7 +33,7 @@ Add these to your HTML:
 
 If you prefer, because you are a classy ES6 expert, you can import the JS like this:
 
-`import slidein from 'slidein'` (check to make sure this works?)
+`import slidein from 'slidein'`
 
 **However**, you should load your CSS **synchronously**. That may sound archaic, but it ensures your slide-in elements are properly hidden by the first paint—no flashing and then reappearing. Plus, the amount of CSS included in slidein is tiny.
 
