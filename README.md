@@ -253,9 +253,9 @@ It's worth noting that custom CSS variables are inherited, so technically you co
 
 ### Usage with a Framework
 
-Slidein is written in vanilla JS and should work in any web browser that supports attribute selectors and CSS animations. It can be paired with any framework you like.
+Slidein is written in vanilla JS and will work in any web browser that supports attribute selectors and CSS animations. It can be paired with any framework you like.
 
-**However**, there is one gotcha. By default, slidein looks for `slide` elements once the DOM is loaded. If you add more `slide` elements to the DOM post-load (which, if you're using React or a similar component-based library, is pretty likely), you'll need to call slidein's `update` method to register them.
+**However**, there is one gotcha. By default, slidein looks for `slide` elements once the DOM is loaded. If you add more `slide` elements to the DOM post-load (likely in with most frameworks), you'll need to call slidein's `update` method to register them.
 
 #### Example
 
